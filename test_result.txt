@@ -1,0 +1,41 @@
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.jpype.JPypeContext in an unnamed module (file:/C:/Users/ktw80/AppData/Roaming/Python/Python313/site-packages/org.jpype.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+===========================================================================
+제목                                       기대           예측  확률분포
+===========================================================================
+[O] 2024학년도 2학기 국가장학금 신청 안내           scholarship -> scholarship   scholarship:0.41, other:0.24, program:0.11
+[O] 교내 성적우수 장학금 선발 공고                 scholarship -> scholarship   scholarship:0.93, program:0.02, academic:0.01
+[O] 삼성전자 하계 인턴십 채용 공고                        job -> job           job:0.45, other:0.18, academic:0.17
+[X] 카카오 신입 공채 안내                             job -> other         other:0.36, job:0.22, event:0.20
+[X] 2024 봄 축제 개최 안내                        event -> other         other:0.64, event:0.19, program:0.05
+[X] 학과 체육대회 개최 알림                          event -> other         other:0.47, event:0.36, job:0.06
+[O] 2024학년도 2학기 수강신청 일정 안내              academic -> academic      academic:0.93, other:0.03, program:0.01
+[O] 졸업논문 제출 마감 일정 공지                    academic -> academic      academic:0.75, other:0.07, event:0.05
+[O] 해외 교환학생 프로그램 참가자 모집                  program -> program       program:0.72, other:0.09, event:0.09
+[O] 창업 멘토링 프로그램 참가자 모집                   program -> program       program:0.99, event:0.00, academic:0.00
+[O] 도서관 임시 휴관 안내                           other -> other         other:0.75, event:0.09, program:0.06
+[O] 교내 주차 제한 안내                            other -> other         other:0.71, event:0.10, academic:0.06
+===========================================================================
+
+정확도: 9/12 = 75.0%
+
+
+=== threshold 민감도 테스트 ===
+
+[장학금과 인턴십이 동시에 언급된 글]
+  제목: 장학금 지원 및 인턴십 채용 연계 프로그램
+  예측: scholarship  tags(>=0.2): ['job', 'program', 'scholarship']
+  전체확률: scholarship:0.308, job:0.266, program:0.224, academic:0.114, event:0.051, other:0.037
+
+[짧은 제목만 있는 글]
+  제목: 수강신청
+  예측: academic  tags(>=0.2): ['academic']
+  전체확률: academic:0.926, other:0.023, program:0.020, event:0.017, job:0.010, scholarship:0.005
+
+[영어만 있는 제목]
+  제목: Software Engineering Internship 2024
+  예측: other  tags(>=0.2): ['other']
+  전체확률: other:0.549, event:0.169, program:0.113, academic:0.074, job:0.065, scholarship:0.030
