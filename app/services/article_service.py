@@ -2,7 +2,16 @@ from sqlalchemy.orm import Session
 from app.models.article import Article
 from app.crawlers.base import Notice
 from classifier import classify
-from NLP import summarize_notice
+from LLMAPI import summarize_notice
+
+_CATEGORY_KO = {
+    "scholarship": "장학",
+    "academic":    "학사",
+    "job":         "취업",
+    "event":       "행사",
+    "program":     "프로그램",
+    "other":       "기타",
+}
 
 # 특정 소스는 해당 카테고리 전용 크롤러 → 모델이 other로 분류할 때 소스 힌트로 보정
 _SOURCE_CATEGORY_HINT: dict[str, str] = {
@@ -24,7 +33,7 @@ def save_new_articles(db: Session, notices: list[Notice]) -> list[Article]:
         # 2. 요약
         summary = summarize_notice(
             {"title": notice.title, "content": notice.content},
-            category=category,
+            category=_CATEGORY_KO.get(category, "기타"),
         )
 
         article = Article(

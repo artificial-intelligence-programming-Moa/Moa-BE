@@ -15,6 +15,9 @@ class Settings(BaseSettings):
     # 크롤링
     TARGET_URL: str
 
+    # LLM
+    OPENAI_API_KEY: str = ""
+
     class Config:
         env_file = ".env"
 

@@ -2,9 +2,12 @@
 
 import os
 from openai import OpenAI
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # -------------------------------------------------------------------------------------------
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "API키 넣어주세요") 
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 MODEL = "gpt-4o-mini"  
 
 client = OpenAI(api_key=OPENAI_API_KEY)
