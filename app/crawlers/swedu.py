@@ -45,8 +45,28 @@ class SweduCrawler(BaseCrawler):
         return notices
 
     def get_content(self, url: str) -> str:
+        import re
         soup = self.get_soup(url)
         if not soup:
             return ""
         area = soup.select_one("#bo_v_con") or soup.select_one(".bo_content")
-        return area.get_text(separator="\n", strip=True) if area else ""
+        if not area:
+            return ""
+
+        # <br> 태그를 개행 마커로 교체
+        for br in area.find_all("br"):
+            br.replace_with("\n")
+
+        # <p> 단위로만 줄바꿈 — span 사이는 separator="" 로 붙임
+        paragraphs = area.find_all("p")
+        if paragraphs:
+            lines = []
+            for p in paragraphs:
+                line = p.get_text(separator="", strip=False).strip()
+                line = re.sub(r" {2,}", " ", line)
+                if line:
+                    lines.append(line)
+            return "\n".join(lines)
+
+        # p 태그가 없는 구조 폴백
+        return area.get_text(separator="\n", strip=True)

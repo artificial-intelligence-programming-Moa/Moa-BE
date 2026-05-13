@@ -58,7 +58,36 @@ class KhuMainCrawler(BaseCrawler):
         if not soup:
             return ""
         area = soup.select_one("div.row.contents")
-        return area.get_text(separator="\n", strip=True) if area else ""
+        if not area:
+            return ""
+
+        text = area.get_text(separator="\n", strip=True)
+        if text:
+            return text
+
+        # 이미지 전용 공지: 이미지 파일명·첨부파일명에서 힌트 추출
+        import os
+        hints = []
+        for img in area.find_all("img"):
+            for attr in ("alt", "title"):
+                val = img.get(attr, "").strip()
+                if val:
+                    hints.append(val)
+            src = img.get("src", "")
+            fname = os.path.splitext(os.path.basename(src))[0]
+            fname = re.sub(r"[_\-]+", " ", fname).strip()
+            if fname:
+                hints.append(fname)
+
+        file_area = soup.select_one("div.row.addFile")
+        if file_area:
+            for a in file_area.find_all("a"):
+                fname = a.get_text(strip=True)
+                fname = re.sub(r"\.[a-zA-Z]+$", "", fname).strip()
+                if fname:
+                    hints.append(fname)
+
+        return " ".join(hints)
 
 
 def make_khu_haksa_crawler() -> KhuMainCrawler:
